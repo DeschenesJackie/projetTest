@@ -16,9 +16,6 @@
         <p> facteur d'Humidité : {{ currentHumidity }}%</p>
         <p> Ennuagement : {{currentClouds}}%</p>
         <p> Vents : {{currentWind}} Km/h</p>
-        <p> Intempérie(s): </p>
-        {% for weather in currentWeathers %}
-            <p> {{weather.description}}</p>
-        {% endfor %}
+        <p> Intempérie(s): {{currentWeathers}}.</p>
     </body>
 </html>

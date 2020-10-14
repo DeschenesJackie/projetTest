@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\WeatherReport;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,22 +15,48 @@ class CurrentWeather extends AbstractController
      */
     public function current()
     {
+        $entityManager = $this->getDoctrine()->getManager();
         $content = $this->callAPI('45.50888', '-73.561668');
         $current = $content['current'];
-        return $this->render('weather/current.html.twig', [
-            'timezone' => $content['timezone'],
-            'lat' => $content['lat'],
-            'lon' => $content['lon'],
-            'currentTime' => date("Y-m-d H:i", $current['dt'] + $content['timezone_offset']),
-            'sunrise' => date("H:i:s", $current['sunrise'] + $content['timezone_offset']),
-            'sunset' => date("H:i:s", $current['sunset'] + $content['timezone_offset']),
-            'currentTemp' => $current['temp'],
-            'currentFeelTemp' => $current['feels_like'],
-            'currentHumidity' => $current['humidity'],
-            'currentClouds' => $current['clouds'],
-            'currentWind' => $current['wind_speed']*3.6,
-            'currentWeathers' => $current['weather'],
 
+        $weatherReport = new WeatherReport();
+        $weatherReport->setTimezone($content['timezone']);
+        $weatherReport->setLat($content['lat']);
+        $weatherReport->setLon($content['lon']);
+        $weatherReport->setDateTime(date("Y-m-d H:i", $current['dt'] + $content['timezone_offset']));
+        $weatherReport->setSunrise(date("H:i:s", $current['sunrise'] + $content['timezone_offset']));
+        $weatherReport->setSunset(date("H:i:s", $current['sunset'] + $content['timezone_offset']));
+        $weatherReport->setTemp($current['temp']);
+        $weatherReport->setRealFeel($current['feels_like']);
+        $weatherReport->setHumidity($current['humidity']);
+        $weatherReport->setClouds($current['clouds']);
+        $weatherReport->setWinds($current['wind_speed']*3.6);
+        
+        if (sizeof($current['weather']) > 0) {
+            $conditions = "";
+            for ($i = 0; $i < sizeof($current['weather']); $i++) {
+                $conditions.= ($current['weather'][$i])['description'];
+                $conditions.=" ";
+            }
+            $weatherReport->setConditions($conditions);
+        }
+
+        $entityManager->persist($weatherReport);
+        $entityManager->flush();
+
+        return $this->render('weather/current.html.twig', [
+            'timezone' => $weatherReport->getTimezone(),
+            'lat' => $weatherReport->getLat(),
+            'lon' => $weatherReport->getLon(),
+            'currentTime' => $weatherReport->getDateTime(),
+            'sunrise' => $weatherReport->getSunrise(),
+            'sunset' => $weatherReport->getSunset(),
+            'currentTemp' => $weatherReport->getTemp(),
+            'currentFeelTemp' => $weatherReport->getRealFeel(),
+            'currentHumidity' => $weatherReport->getHumidity(),
+            'currentClouds' => $weatherReport->getClouds(),
+            'currentWind' => $weatherReport->getWinds(),
+            'currentWeathers' => $weatherReport->getConditions(),
         ]);
     }
 
