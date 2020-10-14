@@ -60,6 +60,54 @@ class CurrentWeather extends AbstractController
         ]);
     }
 
+
+    /** NOT FUNCTIONNAL LEFT THERE TO SHOW ATTEMPT */
+    /**
+     * @Route("/weather/current/{id}", name="report_show")
+     */
+    /*
+    public function show($id)
+    {
+        $weatherReport = $this->getDoctrine()
+            ->getRepository(WeatherReport::class)
+            ->find($id);
+        if (!$weatherReport) {
+            throw $this->createNotFoundException(
+                'No product found for id '.$id
+            );
+        }
+
+        return $this->render('weather/current.html.twig', [
+            'timezone' => $weatherReport->getTimezone(),
+            'lat' => $weatherReport->getLat(),
+            'lon' => $weatherReport->getLon(),
+            'currentTime' => $weatherReport->getDateTime(),
+            'sunrise' => $weatherReport->getSunrise(),
+            'sunset' => $weatherReport->getSunset(),
+            'currentTemp' => $weatherReport->getTemp(),
+            'currentFeelTemp' => $weatherReport->getRealFeel(),
+            'currentHumidity' => $weatherReport->getHumidity(),
+            'currentClouds' => $weatherReport->getClouds(),
+            'currentWind' => $weatherReport->getWinds(),
+            'currentWeathers' => $weatherReport->getConditions(),
+        ]);
+    }
+    */
+    /**
+     * @Route("/weather/dbstats")
+     */
+    public function db_stats()
+    {
+        $totalReport = $this->getDoctrine()->getRepository(WeatherReport::class)->findAmountOfReport();
+        $avgTemp = $this->getDoctrine()->getRepository(WeatherReport::class)->getAvgTemp();
+
+
+        return $this->render('weather/db_stats.html.twig',[
+            'nbTotalReport' => $totalReport,
+            'avgTemp' => $avgTemp,
+        ]);
+    }
+
     public function callAPI($lat, $lon) :array
     {
         $currentWeather = HttpClient::create();
@@ -67,7 +115,7 @@ class CurrentWeather extends AbstractController
             'query' => [
                 'lat' => $lat,
                 'lon' => $lon,
-                'exclude' => 'minutely,hourly,daily',
+                'exclude' => 'minutely,hourly,daily,alerts',
                 'units' => 'metric',
                 'appid' => '7dd2e8675f87b5a8cae35d4fad08f2e1',
                 'lang' => 'fr',

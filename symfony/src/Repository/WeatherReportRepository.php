@@ -19,6 +19,30 @@ class WeatherReportRepository extends ServiceEntityRepository
         parent::__construct($registry, WeatherReport::class);
     }
 
+    public function findAmountOfReport()
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT count(p)
+            FROM App\Entity\WeatherReport p'
+        );
+
+        return $query->getSingleScalarResult();
+    }
+
+    public function getAvgTemp()
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT AVG(p.temp)
+            FROM App\Entity\WeatherReport p'
+        );
+
+        return $query->getSingleScalarResult();
+    }
+
     // /**
     //  * @return WeatherReport[] Returns an array of WeatherReport objects
     //  */
