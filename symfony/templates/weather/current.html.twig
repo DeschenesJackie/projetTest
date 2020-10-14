@@ -2,10 +2,23 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Temp Courrant.{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        <h1>{{ world }}</h1>
+        <h1>Fuseau Horraire : {{ timezone }}</h1>
+        <h2>Latitude {{ lat }}, longitude {{ lon }}.</h2>
+        <h3>Date/Heure : {{ currentTime }}.</h3>
+        <p>Levé du soleil : {{ sunrise }}</p>
+        <p>Couché du soleil : {{ sunset }}</p>
+        <p>Température : {{currentTemp}} Celsius</p>
+        <p>Resentis : {{currentFeelTemp}} Celsius</p>
+        <p> facteur d'Humidité : {{ currentHumidity }}%</p>
+        <p> Ennuagement : {{currentClouds}}%</p>
+        <p> Vents : {{currentWind}} Km/h</p>
+        <p> Intempérie(s): </p>
+        {% for weather in currentWeathers %}
+            <p> {{weather.description}}</p>
+        {% endfor %}
     </body>
 </html>
