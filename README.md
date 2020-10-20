@@ -18,8 +18,8 @@ Comme demander j'ai garder note de mon progres. J'ai eu beaucoup de ralentisseme
 13:21 Work Start on Doctrine
 13:48 Table/Entity created with Doctrine
 14:51 Save entry into db use entity to display API result
-16:24 Added 2 statistics from db (un-imaginative) / Attempted to display of previous API call through http://localhost:8001/weather/current/{{ id }}
-16:36 Abandon de tentative de faire des ajouts au projet commit planning to turn in soon.
+16:24 Added 2 statistics from db (un-imaginative) / Attempted (failed) to display of previous API call through http://localhost:8001/weather/current/{{ id }}
+16:36 Abandon de tentative de faire des ajouts au projet commit planning to turn in soon. (Attempted to create a form to modify lat and lon using post)
 
 Plannification de la bases de donnée
 
